@@ -14,6 +14,12 @@ const corsOptions = {
      credentials: true, // Required for cookies, if you're using them
      optionsSuccessStatus: 204,
    };
+app.use((req, res, next) => {
+     res.header('Access-Control-Allow-Origin', 'https://haweb-admin.vercel.app');
+     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+     res.header('Access-Control-Allow-Headers', 'Content-Type');
+     next();
+   });
 // middleWare
 const morgan = require("morgan");
 app.use(cors(corsOptions));
