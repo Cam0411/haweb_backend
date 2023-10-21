@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT
 // config cors 
 const corsOptions = {
-     origin: 'http://localhost:3000', // Replace with your frontend URL
+     origin: 'https://haweb-admin.vercel.app', // Replace with your frontend URL
      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
      credentials: true, // Required for cookies, if you're using them
      optionsSuccessStatus: 204,
