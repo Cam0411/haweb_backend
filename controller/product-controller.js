@@ -71,11 +71,13 @@ async function getCategoryProduct(req,res){
   try {
      const categorySlug = req.params.categorySlug;
      const products = await product.find({categorySlug})
+     const productCount = await product.countDocuments({ categorySlug });
      res.status(200).json({
        success:true,
        message:"get category success",
        category:categorySlug,
-       product:products
+       product:products,
+       length:productCount,
      })
   } catch (err) {
      res.status(404).json({
