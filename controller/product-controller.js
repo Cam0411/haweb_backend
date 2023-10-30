@@ -35,10 +35,20 @@ async function getAllProduct(req,res) {
   try {
     const products = await product.find();
     const productCount = await product.countDocuments();
+    const categoryCounts = await product.aggregate([
+      {
+        $group: {
+          _id: "$categorySlug",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
     res.status(200).json({
        success:true,
        message:"get product successfully",
        length:productCount,
+       categoryLength:categoryCounts,
        product:products
     })
   } catch (err) {
@@ -167,6 +177,30 @@ async function searchProduct(req,res) {
   }
 }
 
+async function searchProductPublic(req,res) {
+  try {
+    const searchItem = req.params.key;
+    const hyphenatedSearchTerm = searchItem.replace(/\s+/g, '-');
+    const products = await product.find({
+      $or: [
+        { title: { $regex: searchItem,$options: 'i'} },
+        {slug: { $regex: hyphenatedSearchTerm,$options: 'i'} }
+      ],
+    })
+    res.status(202).json({
+      success:true,
+      message:"search product successfully",
+      products,
+    })
+  } catch (err) {
+    res.status(404).json({
+      success:false,
+      message:"search product failer",
+    })
+    console.log(err);
+  }
+}
+
   module.exports = {
     createProduct,
     getAllProduct,
@@ -175,6 +209,7 @@ async function searchProduct(req,res) {
     updateProduct,
     updateAllProduct,
     removeProduct,
-    searchProduct
+    searchProduct,
+    searchProductPublic
   };
   
