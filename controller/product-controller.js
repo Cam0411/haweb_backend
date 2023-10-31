@@ -4,7 +4,7 @@ const slugify = require('slugify');
 
 async function createProduct(req, res) {
     try {
-      const {title,description,category,photo}= req.body; // Assuming product data is sent in the request body
+      const {title,description,category,photo,material,codeProduct,size}= req.body; // Assuming product data is sent in the request body
       const productSlug = slugify(title,{lower:true});
       const cateSlug = slugify(category,{lower:true});
       const maxCustomId = await product.findOne({})
@@ -14,11 +14,14 @@ async function createProduct(req, res) {
       const products = new product({ 
         customId:newCustomId,
         title,
+        codeProduct,
         slug:productSlug,
         categorySlug:cateSlug,
         description,
         category,
-        photo
+        photo,
+        material,
+        size,
       });
      await products.save();
      res.status(201).json({
@@ -161,7 +164,7 @@ async function searchProduct(req,res) {
   try {
     const searchParams = req.params.querry;
     const results = await product.find({
-         description: { $regex: searchParams, $options: 'i' }  ,
+      codeProduct: { $regex: searchParams, $options: 'i' }  ,
     });
     res.status(200).json({
        success:true,
@@ -201,6 +204,22 @@ async function searchProductPublic(req,res) {
   }
 }
 
+async function deleteAllProduct(req,res){
+  try {
+    const deleteAllProduct = await product.deleteMany({})
+    res.status(201).json({
+      success:false,
+      message:"Delete all product success",
+      deleteAllProduct,
+    })
+  } catch (err) {
+    res.status(404).json({
+       success:false,
+       message:"Delete all product failure",
+    })
+  }
+}
+
   module.exports = {
     createProduct,
     getAllProduct,
@@ -210,6 +229,7 @@ async function searchProductPublic(req,res) {
     updateAllProduct,
     removeProduct,
     searchProduct,
-    searchProductPublic
+    searchProductPublic,
+    deleteAllProduct
   };
   
