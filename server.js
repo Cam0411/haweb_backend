@@ -1,6 +1,7 @@
 const express = require('express')
 const db = require("./db/db.js")
 const productRoute = require("./route/product-route.js")
+const blogRoute = require("./route/blog-route.js")
 const cors = require('cors');
 require('dotenv').config();
 
@@ -30,6 +31,7 @@ app.use(morgan('dev'))
 
 app.use(express.json());
 app.use("/api/product",productRoute)
+app.use("/api/blog",blogRoute)
 app.listen(port, () => {
      console.log("hello world");
 })
