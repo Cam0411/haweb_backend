@@ -5,7 +5,7 @@ const slugify = require('slugify');
 
 async function createblog(req, res) {
     try {
-      const {title,content,photo}= req.body; // Assuming blog data is sent in the request body
+      const {title,content,photo,keyword, destription}= req.body; // Assuming blog data is sent in the request body
       const maxCustomId = await blog.findOne({})
       .sort('-customId') // Sort in descending order to get the maximum customId
       .select('customId');
@@ -16,6 +16,8 @@ async function createblog(req, res) {
         slug:blogSlug,
         content,
         photo,
+        keyword,
+        destription,
         customId:newCustomId,
       });
      blogs.save();
