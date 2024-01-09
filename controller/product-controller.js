@@ -4,7 +4,7 @@ const slugify = require('slugify');
 
 async function createProduct(req, res) {
     try {
-      const {title,description,category,photo,material,codeProduct,size}= req.body; // Assuming product data is sent in the request body
+      const {title,keyword,main_destription,content,description,category,photo,material,codeProduct,size}= req.body; // Assuming product data is sent in the request body
       const productSlug = slugify(title,{lower:true});
       const cateSlug = slugify(category,{lower:true});
       const maxCustomId = await product.findOne({})
@@ -14,6 +14,9 @@ async function createProduct(req, res) {
       const products = new product({ 
         customId:newCustomId,
         title,
+        keyword,
+        main_destription,
+        content,
         codeProduct,
         slug:productSlug,
         categorySlug:cateSlug,

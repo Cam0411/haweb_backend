@@ -5,6 +5,14 @@ const productSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
+    keyword: {
+      type:String,
+      require:true,
+    },
+    main_destription: {
+      type:String,
+      require:true,
+    },
     material: {
       type:String,
       required: true,
@@ -12,6 +20,10 @@ const productSchema = new mongoose.Schema({
      description: {
         type: String,
         required: true,
+      },
+      content: {
+        type: String,
+        required:true,
       },
      codeProduct: {
       type: String,

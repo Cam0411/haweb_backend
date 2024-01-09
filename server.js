@@ -3,6 +3,9 @@ const db = require("./db/db.js")
 const productRoute = require("./route/product-route.js")
 const blogRoute = require("./route/blog-route.js")
 const cors = require('cors');
+// sitemap 
+const {SitemapStream, streamToPromise } = require('sitemap');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +35,37 @@ app.use(morgan('dev'))
 app.use(express.json());
 app.use("/api/product",productRoute)
 app.use("/api/blog",blogRoute)
+// sitemap 
+const baseUrl = 'https://www.trangtritetshop.com'; 
+
+app.get('/sitemap.xml', async (req, res) => {
+  const pages = [
+    '/',
+    '/about-us',
+    '/category',
+    '/save-product',
+    '/product'
+    // Add more pages as needed
+  ];
+
+  const stream = new SitemapStream({ hostname: baseUrl });
+
+  pages.forEach((page) => {
+    stream.write({ url: page, changefreq: 'weekly', priority: 0.8 });
+  });
+
+  stream.end();
+
+  try {
+    const sitemapXML = await streamToPromise(stream).then((data) => data.toString());
+
+    res.header('Content-Type', 'application/xml');
+    res.send(sitemapXML);
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 app.listen(port, () => {
      console.log("hello world");
 })
